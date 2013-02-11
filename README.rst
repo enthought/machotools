@@ -8,3 +8,5 @@ Examples::
 
         # Print the id (i.e. install_name) of the given .dylib
         python -m machotools install_name foo.dylib
+
+Development happens on `github <http://github.com/enthought/machotools>`_

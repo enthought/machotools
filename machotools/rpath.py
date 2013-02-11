@@ -1,3 +1,5 @@
+# Copyright (c) 2013 by Enthought, Ltd.
+# All rights reserved.
 import macholib.MachO
 import macholib.mach_o
 
