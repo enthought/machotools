@@ -25,3 +25,10 @@ class TestInstallName(unittest.TestCase):
         machotools.misc.change_install_name(temp_fp.name, r_install_name)
 
         self.assertEqual(machotools.misc.install_name(temp_fp.name)[0], r_install_name)
+
+class TestDependents(unittest.TestCase):
+    def test_simple(self):
+        dylib = op.join(DYLIB_DIRECTORY, "foo.dylib")
+
+        self.assertEqual(len(machotools.misc.dependencies(dylib)), 1)
+        self.assertEqual(machotools.misc.dependencies(dylib)[0], ["/usr/lib/libSystem.B.dylib"])

@@ -93,3 +93,22 @@ def change_install_name(filename, new_install_name):
             f.seek(0)
             header.write(f)
     safe_write(filename, writer, "wb")
+
+def dependencies(filename):
+    """Returns the list of mach-o the given binary depends on.
+
+    Parameters
+    ----------
+    filename: str
+        Path to the mach-o to query
+    """
+    ret = []
+
+    m = macholib.MachO.MachO(filename)
+    for header in m.headers:
+        this_ret = []
+        for load_command, dylib_command, data in header.commands:
+            if load_command.cmd == mach_o.LC_LOAD_DYLIB:
+                this_ret.append(rstrip_null_bytes(data))
+        ret.append(this_ret)
+    return ret
