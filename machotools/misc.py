@@ -6,7 +6,6 @@ from macholib import mach_o
 
 from macholib.ptypes import sizeof
 
-from machotools.definitions import COMMAND_NAME_TO_ID
 from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_write
 
 def install_name(filename):
@@ -17,7 +16,7 @@ def install_name(filename):
     for header in m.headers:
         install_names = []
         for command in header.commands:
-            if command[0].cmd == COMMAND_NAME_TO_ID["LC_ID_DYLIB"]:
+            if command[0].cmd == mach_o.LC_ID_DYLIB:
                 install_names.append(rstrip_null_bytes(command[2]))
 
         if len(install_names) != 1:
@@ -75,7 +74,7 @@ def change_install_name(filename, new_install_name):
     for header in m.headers:
         to_delete = []
         for load_command, dylib_command, data in header.commands:
-            if load_command.cmd == COMMAND_NAME_TO_ID["LC_ID_DYLIB"]:
+            if load_command.cmd == mach_o.LC_ID_DYLIB:
                 to_delete.append((load_command, dylib_command, data))
 
         if len(to_delete) < 1:
