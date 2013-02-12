@@ -4,7 +4,7 @@ import sys
 
 import argparse
 
-from machotools.misc import install_name
+from machotools.misc import change_install_name, install_name
 from machotools.rpath import list_rpaths
 
 def list_rpaths_command(namespace):
@@ -23,6 +23,9 @@ def list_install_names(namespace):
         for name in install_names:
             print name
 
+def change_install_name_command(namespace):
+    change_install_name(namespace.macho, namespace.install_name)
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
@@ -37,6 +40,11 @@ def main(argv=None):
     install_name_parser = sub_parsers.add_parser("install_name", help="Manipulate rpaths")
     install_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
     install_name_parser.set_defaults(func=list_install_names)
+
+    change_install_name_parser = sub_parsers.add_parser("change_install_name", help="Change install_name")
+    change_install_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
+    change_install_name_parser.add_argument("install_name", help="New install name")
+    change_install_name_parser.set_defaults(func=change_install_name_command)
 
     namespace = p.parse_args(argv)
     namespace.func(namespace)
