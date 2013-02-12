@@ -5,5 +5,5 @@ if __name__ == "__main__":
           version="0.0.1",
           author="David Cournapeau",
           author_email="cournape@gmail.com",
-          license="Proprietary",
+          license="BSD",
           packages=["machotools", "machotools.tests"])
