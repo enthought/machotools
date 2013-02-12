@@ -100,6 +100,11 @@ def dependencies(filename):
     ----------
     filename: str
         Path to the mach-o to query
+
+    Returns
+    -------
+    dependency_names: seq
+        dependency_names[i] is the list of dependencies for the i-th header.
     """
     ret = []
 
