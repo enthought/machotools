@@ -7,7 +7,7 @@ from macholib.ptypes import sizeof
 
 from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_write
 
-def list_rpaths_from_file(filename):
+def list_rpaths(filename):
     """Get the list of rpaths defined in the given mach-o binary.
 
     The returned value is a list rpaths such as rpaths[i] is the list of rpath
@@ -39,7 +39,7 @@ def list_rpaths_from_file(filename):
 
     return rpaths
 
-def add_rpaths_to_file(filename, rpaths):
+def add_rpaths(filename, rpaths):
     """Add the given list of path rpaths to all header in a MachO file.
 
     Parameters

@@ -5,10 +5,10 @@ import sys
 import argparse
 
 from machotools.misc import install_name
-from machotools.rpath import list_rpaths_from_file
+from machotools.rpath import list_rpaths
 
 def list_rpaths_command(namespace):
-    rpaths = list_rpaths_from_file(namespace.macho)
+    rpaths = list_rpaths(namespace.macho)
     if not len(rpaths) == 1:
         raise ValueError("Multi-arch files not supported yet !")
     else:
