@@ -5,7 +5,7 @@ import macholib.mach_o
 
 from macholib.ptypes import sizeof
 
-from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_write
+from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_update
 
 def list_rpaths(filename):
     """Get the list of rpaths defined in the given mach-o binary.
@@ -58,7 +58,7 @@ def add_rpaths(filename, rpaths):
         for header in macho.headers:
             f.seek(0)
             header.write(f)
-    safe_write(filename, writer, "wb")
+    safe_update(filename, writer, "wb")
 
 def _add_rpath_to_header(header, rpath):
     """Add an LC_RPATH load command to a MachOHeader.

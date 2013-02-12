@@ -3,10 +3,9 @@
 import macholib.MachO
 
 from macholib import mach_o
-
 from macholib.ptypes import sizeof
 
-from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_write
+from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_update
 
 def install_name(filename):
     """Returns the install name of a mach-o dylib file."""
@@ -91,7 +90,7 @@ def change_install_name(filename, new_install_name):
         for header in m.headers:
             f.seek(0)
             header.write(f)
-    safe_write(filename, writer, "wb")
+    safe_update(filename, writer, "wb")
 
 def dependencies(filename):
     """Returns the list of mach-o the given binary depends on.
