@@ -5,3 +5,10 @@ python:
 install:
   - pip install -r requirements.txt
 script: nosetests machotools
+
+notifications:
+  email:
+    recipients:
+      - davidc@enthought.com
+    on_success: change
+    on_failure: always
