@@ -36,9 +36,10 @@ def _remove_command(header, command):
 
     return command_index
 
-def _create_dylib_command(header, new_install_name, command_index=None):
-    if command_index is None:
-        command_index = len(header.commands)
+def _change_dylib_command(header, new_install_name):
+    # We change the command 'in-place' to ensure the new dylib command is as
+    # close as possible as the old one (same version, timestamp, etc...)
+    command_index, (old_load_command, old_dylib_command, old_data) = _find_lc_id_dylib(header)
 
     if header.header.magic in (mach_o.MH_MAGIC, mach_o.MH_CIGAM):
         pad_to = 4
@@ -46,15 +47,27 @@ def _create_dylib_command(header, new_install_name, command_index=None):
         pad_to = 8
     data = macho_path_as_data(new_install_name, pad_to=pad_to)
 
-    header_size = sizeof(mach_o.load_command) + sizeof(mach_o.dylib_command)
-    command_size = header_size + len(data)
-    dylib_command = mach_o.dylib_command(header_size, _endian_=header.endian)
-    load_command = mach_o.load_command(mach_o.LC_ID_DYLIB, command_size,
-                                                _endian_=header.endian)
+    cmdsize_diff = len(data) - len(old_data)
+    load_command = old_load_command
+    load_command.cmdsize += cmdsize_diff
 
-    header.commands.insert(command_index, (load_command, dylib_command, data))
-    header.header.ncmds += 1
-    header.changedHeaderSizeBy(command_size)
+    dylib_command = old_dylib_command
+
+    header.commands[command_index] = (load_command, dylib_command, data)
+    header.changedHeaderSizeBy(cmdsize_diff)
+
+def _find_lc_id_dylib(header):
+    commands = []
+    for command_index, (load_command, dylib_command, data) in enumerate(header.commands):
+        if load_command.cmd == mach_o.LC_ID_DYLIB:
+            commands.append((command_index, (load_command, dylib_command, data)))
+
+    if len(commands) < 1:
+        raise ValueError("No LC_ID_DYLIB command in {0} ?".format(filename))
+    elif len(commands) > 1:
+        raise ValueError("Unexpected number of LC_ID_DYLIB commands (>1) for {0}".format(filename))
+    else:
+        return commands[0]
 
 def change_install_name(filename, new_install_name):
     """Change the install name of a mach-o dylib file.
@@ -71,20 +84,7 @@ def change_install_name(filename, new_install_name):
     """
     m = macholib.MachO.MachO(filename)
     for header in m.headers:
-        to_delete = []
-        for load_command, dylib_command, data in header.commands:
-            if load_command.cmd == mach_o.LC_ID_DYLIB:
-                to_delete.append((load_command, dylib_command, data))
-
-        if len(to_delete) < 1:
-            raise ValueError("No LC_ID_DYLIB command in {0} ?".format(filename))
-        elif len(to_delete) > 1:
-            raise ValueError("Unexpected number of LC_ID_DYLIB commands (>1) for {0}".format(filename))
-        else:
-            to_delete = to_delete[0]
-
-        command_index = _remove_command(header, to_delete)
-        _create_dylib_command(header, new_install_name, command_index)
+        _change_dylib_command(header, new_install_name)
 
     def writer(f):
         for header in m.headers:
