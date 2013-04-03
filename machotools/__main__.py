@@ -4,7 +4,7 @@ import sys
 
 import argparse
 
-from machotools.misc import change_install_name, install_name
+from machotools.misc import change_install_name, install_name, change_dependency
 from machotools.rpath import list_rpaths
 
 def list_rpaths_command(namespace):
@@ -26,6 +26,9 @@ def list_install_names(namespace):
 def change_install_name_command(namespace):
     change_install_name(namespace.macho, namespace.install_name)
 
+def change_dependency_name_command(namespace):
+    change_dependency(namespace.macho, namespace.old_library_pattern, namespace.new_library)
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
@@ -45,6 +48,14 @@ def main(argv=None):
     change_install_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
     change_install_name_parser.add_argument("install_name", help="New install name")
     change_install_name_parser.set_defaults(func=change_install_name_command)
+
+    change_dependency_name_parser = sub_parsers.add_parser("change_library",
+            help="Change library dependency")
+    change_dependency_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
+    change_dependency_name_parser.add_argument("old_library_pattern", help="Old library to change (can be a regex)")
+    change_dependency_name_parser.add_argument("new_library",
+            help="New library to replace the old one with") 
+    change_dependency_name_parser.set_defaults(func=change_dependency_name_command)
 
     namespace = p.parse_args(argv)
     namespace.func(namespace)
