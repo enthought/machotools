@@ -4,7 +4,7 @@ import sys
 
 import argparse
 
-from machotools.misc import change_install_name, install_name, change_dependency
+from machotools import change_install_name, install_name, change_dependency, dependencies
 from machotools.rpath import list_rpaths
 
 def list_rpaths_command(namespace):
@@ -28,6 +28,14 @@ def change_install_name_command(namespace):
 
 def change_dependency_name_command(namespace):
     change_dependency(namespace.macho, namespace.old_library_pattern, namespace.new_library)
+
+def list_dependency_name_command(namespace):
+    deps = dependencies(namespace.macho)
+    if not len(deps) == 1:
+        raise ValueError("Multi-arch files not supported yet !")
+    else:
+        for dep in deps[0]:
+            print dep
 
 def main(argv=None):
     if argv is None:
@@ -56,6 +64,11 @@ def main(argv=None):
     change_dependency_name_parser.add_argument("new_library",
             help="New library to replace the old one with") 
     change_dependency_name_parser.set_defaults(func=change_dependency_name_command)
+
+    list_dependency_name_parser = sub_parsers.add_parser("list_libraries",
+            help="Change library dependency")
+    list_dependency_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
+    list_dependency_name_parser.set_defaults(func=list_dependency_name_command)
 
     namespace = p.parse_args(argv)
     namespace.func(namespace)
