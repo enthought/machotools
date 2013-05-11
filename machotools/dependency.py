@@ -1,6 +1,5 @@
 import os
 import re
-import stat
 
 import macholib
 
@@ -69,6 +68,4 @@ def change_dependency(filename, old_dependency_pattern, new_dependency):
         for header in m.headers:
             f.seek(0)
             header.write(f)
-    mode = stat.S_IMODE(os.stat(filename).st_mode)
     safe_update(filename, writer, "wb")
-    os.chmod(filename, mode)

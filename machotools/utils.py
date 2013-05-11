@@ -2,6 +2,7 @@
 # All rights reserved.
 import os
 import shutil
+import stat
 import uuid
 
 from macholib.util import fsencoding
@@ -66,12 +67,15 @@ def safe_write(target, writer, mode="wt"):
         data = writer
         writer = lambda fp: fp.write(data)
 
+    file_mode = stat.S_IMODE(os.stat(target).st_mode)
+
     tmp_target = "%s.tmp%s" % (target, uuid.uuid4().hex)
     f = open(tmp_target, mode)
     try:
         writer(f)
     finally:
         f.close()
+    os.chmod(tmp_target, file_mode)
     os.rename(tmp_target, target)
 
 def safe_update(target, writer, mode="wt"):
