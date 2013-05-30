@@ -19,6 +19,9 @@ bar.1.0.0.dylib: src/bar.c
 bar.2.0.0.dylib: src/bar.c
 	$(CC) -DBAR_VERSION=2 $< -o $@ -shared -install_name $@
 
+foo.bundle: src/bar.c
+	$(CC) $< -o $@ -bundle
+
 clean:
 	rm -f *.dylib
 	rm -f main
