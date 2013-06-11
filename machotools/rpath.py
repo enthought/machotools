@@ -76,7 +76,13 @@ def _add_rpath_to_header(header, rpath):
         pad_to = 8
     data = macho_path_as_data(rpath, pad_to=pad_to)
     header_size = sizeof(macholib.mach_o.load_command) + sizeof(macholib.mach_o.rpath_command)
+
+    rem = (header_size + len(data)) % pad_to
+    if rem > 0:
+        data += b'\x00' * (pad_to - rem)
+
     command_size = header_size + len(data)
+
     cmd = macholib.mach_o.rpath_command(header_size, _endian_=header.endian)
     lc = macholib.mach_o.load_command(macholib.mach_o.LC_RPATH, command_size,
         _endian_=header.endian)
