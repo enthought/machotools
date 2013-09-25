@@ -11,3 +11,5 @@ __all__ = [
     "rewriter_factory",
     "__version__",
 ]
+
+from .version import __version__
