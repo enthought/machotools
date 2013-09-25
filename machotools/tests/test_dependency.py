@@ -1,6 +1,5 @@
 import shutil
 import tempfile
-import unittest
 
 import os.path as op
 

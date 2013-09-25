@@ -16,10 +16,31 @@ Examples::
 Internally, machotools is written as a library so that it can be used within
 bigger tools, but the API is currently in-flux until the first 1.0 release.
 
+Example::
+
+        from machotools import rewriter_factory
+
+        rewriter = rewriter_factory("foo.dylib")
+        print rewriter.dependencies
+        # install_name property only available if rewriter is a DylibRewriter
+        print rewriter.install_name
+        print rewriter.rpaths
+
+        rewriter.install_name = "bar.dylib"
+        # Changes are not actually written until you call commit()
+        rewriter.commit()
+
+Main features:
+
+        - ability to query/change rpath
+        - ability to query/change the install name
+        - ability to query/change the dependencies
+        - modifications are safe against crash/interruption as files are never
+          modified in place.
+
 Development happens on `github <http://github.com/enthought/machotools>`_
 
 TODO:
 
         - support for multi arch
         - more detailed output for list_libraries (including versioning info)
-        - add OO API
