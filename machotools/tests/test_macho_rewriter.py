@@ -3,12 +3,11 @@ import unittest
 
 import os.path as op
 
-import machotools
-
-from machotools.macho_rewriter import DylibRewriter, ExecutableRewriter, \
+from .. import dependency, misc
+from ..macho_rewriter import DylibRewriter, ExecutableRewriter, \
     _MachoRewriter, rewriter_factory
-from machotools.rpath import list_rpaths
-from machotools.tests.common import FILES_TO_DEPENDENCY_NAMES, FILES_TO_RPATHS, \
+from ..rpath import list_rpaths
+from ..tests.common import FILES_TO_DEPENDENCY_NAMES, FILES_TO_RPATHS, \
     FILES_TO_INSTALL_NAME, FOO_DYLIB, SIMPLE_MAIN, mkdtemp
 
 class TestMachoRewriter(unittest.TestCase):
@@ -100,7 +99,7 @@ class TestMachoRewriter(unittest.TestCase):
             self.assertEqual(rewriter.dependencies, r_dependencies)
 
             rewriter.commit()
-            self.assertEqual(machotools.dependencies(copy)[0], r_dependencies)
+            self.assertEqual(dependency.dependencies(copy)[0], r_dependencies)
 
 class TestDylibRewriter(unittest.TestCase):
     def test_install_name(self):
@@ -120,7 +119,7 @@ class TestDylibRewriter(unittest.TestCase):
                 self.assertEqual(rewriter.install_name, "yomama")
 
                 rewriter.commit()
-                self.assertEqual(machotools.misc.install_name(copy)[0], "yomama")
+                self.assertEqual(misc.install_name(copy)[0], "yomama")
 
 class TestRewriterFactory(unittest.TestCase):
     def test_simple(self):
