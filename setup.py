@@ -6,4 +6,5 @@ if __name__ == "__main__":
           author="David Cournapeau",
           author_email="cournape@gmail.com",
           license="BSD",
-          packages=["machotools", "machotools.tests"])
+          packages=["machotools", "machotools.tests"],
+          install_requires=["macholib"])
