@@ -36,11 +36,11 @@ def main(argv=None):
     p = argparse.ArgumentParser()
     sub_parsers = p.add_subparsers(title="sub commands")
 
-    rpath = sub_parsers.add_parser("list_rpaths", help="Manipulate rpaths")
+    rpath = sub_parsers.add_parser("list_rpaths", help="Print rpaths")
     rpath.add_argument("macho", help="Path to the mach-o to manipulate")
     rpath.set_defaults(func=list_rpaths_command)
 
-    install_name_parser = sub_parsers.add_parser("install_name", help="Manipulate rpaths")
+    install_name_parser = sub_parsers.add_parser("install_name", help="Print the install name")
     install_name_parser.add_argument("macho", help="Path to the mach-o to manipulate")
     install_name_parser.set_defaults(func=list_install_names)
 
