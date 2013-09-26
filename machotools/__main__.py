@@ -4,38 +4,30 @@ import sys
 
 import argparse
 
-from machotools import change_install_name, install_name, change_dependency, dependencies
-from machotools.rpath import list_rpaths
+from .macho_rewriter import rewriter_factory
 
 def list_rpaths_command(namespace):
-    rpaths = list_rpaths(namespace.macho)
-    if not len(rpaths) == 1:
-        raise ValueError("Multi-arch files not supported yet !")
-    else:
-        for rpath in rpaths[0]:
-            print rpath
+    rewriter = rewriter_factory(namespace.macho)
+    for rpath in rewriter.rpaths:
+        print(rpath)
 
 def list_install_names(namespace):
-    install_names = install_name(namespace.macho)
-    if not len(install_names) == 1:
-        raise ValueError("Multi-arch files not supported yet !")
-    else:
-        for name in install_names:
-            print name
+    rewriter = rewriter_factory(namespace.macho)
+    print(rewriter.install_name)
 
 def change_install_name_command(namespace):
-    change_install_name(namespace.macho, namespace.install_name)
+    with rewriter_factory(namespace.macho) as rewriter:
+        rewriter.install_name = namespace.install_name
 
 def change_dependency_name_command(namespace):
-    change_dependency(namespace.macho, namespace.old_library_pattern, namespace.new_library)
+    with rewriter_factory(namespace.macho) as rewriter:
+        rewriter.change_dependency(namespace.old_library_pattern,
+                                   namespace.new_library)
 
 def list_dependency_name_command(namespace):
-    deps = dependencies(namespace.macho)
-    if not len(deps) == 1:
-        raise ValueError("Multi-arch files not supported yet !")
-    else:
-        for dep in deps[0]:
-            print dep
+    rewriter = rewriter_factory(namespace.macho)
+    for dependency in rewriter.dependencies:
+        print(dependency)
 
 def main(argv=None):
     if argv is None:
