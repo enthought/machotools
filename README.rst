@@ -1,5 +1,6 @@
 Machotools is a small set of tools built on top of macholib to retrieve and
-change informations about mach-o files
+change informations about mach-o files. Think of it as a pure python,
+cross-platform implementation of install_name_tool
 
 Examples::
 
@@ -23,6 +24,7 @@ Example::
         rewriter = rewriter_factory("foo.dylib")
         print rewriter.dependencies
         # install_name property only available if rewriter is a DylibRewriter
+        # instance (auto-detected in rewriter_factory)
         print rewriter.install_name
         print rewriter.rpaths
 
@@ -30,11 +32,18 @@ Example::
         # Changes are not actually written until you call commit()
         rewriter.commit()
 
+        # When modifying a binary, one can also use context manager so that
+        # changes are automatically committed when exciting the context.
+        with rewriter_factory("foo.dylib") as rewriter:
+            rewriter.install_name = "bar.dylib"
+
 Main features:
 
         - ability to query/change rpath
         - ability to query/change the install name
         - ability to query/change the dependencies
+        - should work on any platform supported by macholib (mac os x, unix,
+          windows)
         - modifications are safe against crash/interruption as files are never
           modified in place. Instead, modifications are made against a
           temporary copy, and replace the original file using atomic rename on
