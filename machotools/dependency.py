@@ -4,8 +4,8 @@ import macholib
 
 from macholib import mach_o
 
-from machotools.common import _change_command_data_inplace, _find_lc_dylib_command
-from machotools.utils import convert_to_string, safe_update
+from .common import _change_command_data_inplace, _find_lc_dylib_command
+from .utils import convert_to_string, safe_update
 
 def _find_specific_lc_load_dylib(header, dependency_pattern):
     for index, (load_command, dylib_command, data) in \

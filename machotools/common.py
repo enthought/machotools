@@ -1,6 +1,6 @@
 from macholib import mach_o
 
-from machotools.utils import macho_path_as_data
+from .utils import macho_path_as_data
 
 def _change_command_data_inplace(header, index, old_command, new_data):
     # We change the command 'in-place' to ensure the new dylib command is as

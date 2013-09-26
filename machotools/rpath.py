@@ -5,7 +5,7 @@ import macholib.mach_o
 
 from macholib.ptypes import sizeof
 
-from machotools.utils import convert_to_string, macho_path_as_data, safe_update
+from .utils import convert_to_string, macho_path_as_data, safe_update
 
 def list_rpaths(filename):
     """Get the list of rpaths defined in the given mach-o binary.

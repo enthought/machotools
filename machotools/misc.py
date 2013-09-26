@@ -6,8 +6,8 @@ import macholib.MachO
 
 from macholib import mach_o
 
-from machotools.utils import rstrip_null_bytes, safe_update
-from machotools.common import _change_command_data_inplace, _find_lc_dylib_command
+from .utils import rstrip_null_bytes, safe_update
+from .common import _change_command_data_inplace, _find_lc_dylib_command
 
 def install_name(filename):
     """Returns the install name of a mach-o dylib file."""
