@@ -1,4 +1,4 @@
-Machoutils is a small set of tools built on top of macholib to retrieve and
+Machotools is a small set of tools built on top of macholib to retrieve and
 change informations about mach-o files
 
 Examples::
@@ -36,7 +36,9 @@ Main features:
         - ability to query/change the install name
         - ability to query/change the dependencies
         - modifications are safe against crash/interruption as files are never
-          modified in place.
+          modified in place. Instead, modifications are made against a
+          temporary copy, and replace the original file using atomic rename on
+          Posix (emulated on windows).
 
 Development happens on `github <http://github.com/enthought/machotools>`_
 
