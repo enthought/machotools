@@ -14,4 +14,10 @@ if __name__ == "__main__":
           author_email="cournape@gmail.com",
           license="BSD",
           packages=["machotools", "machotools.tests"],
-          install_requires=["macholib"])
+          install_requires=["macholib"],
+          classifiers=[
+              "Programming Language :: Python :: 2.6",
+              "Programming Language :: Python :: 2.7",
+              "Programming Language :: Python :: 3.2",
+              "Programming Language :: Python :: 3.3",
+          ])

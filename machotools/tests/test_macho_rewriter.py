@@ -12,13 +12,13 @@ from ..tests.common import FILES_TO_DEPENDENCY_NAMES, FILES_TO_RPATHS, \
 
 class TestMachoRewriter(unittest.TestCase):
     def test_rpaths(self):
-        for f, r_rpaths in FILES_TO_RPATHS.iteritems():
+        for f, r_rpaths in FILES_TO_RPATHS.items():
             rewriter = _MachoRewriter(f)
             self.assertEqual(rewriter.rpaths, r_rpaths)
 
     def test_context_manager(self):
         with mkdtemp() as d:
-            for f, r_rpaths in FILES_TO_RPATHS.iteritems():
+            for f, r_rpaths in FILES_TO_RPATHS.items():
                 copy = op.join(d, op.basename(f))
                 shutil.copy(f, copy)
 
@@ -29,7 +29,7 @@ class TestMachoRewriter(unittest.TestCase):
 
     def test_append_rpath(self):
         with mkdtemp() as d:
-            for f, r_rpaths in FILES_TO_RPATHS.iteritems():
+            for f, r_rpaths in FILES_TO_RPATHS.items():
                 copy = op.join(d, op.basename(f))
                 shutil.copy(f, copy)
 
@@ -43,7 +43,7 @@ class TestMachoRewriter(unittest.TestCase):
 
     def test_extend_rpaths(self):
         with mkdtemp() as d:
-            for f, r_rpaths in FILES_TO_RPATHS.iteritems():
+            for f, r_rpaths in FILES_TO_RPATHS.items():
                 appended_rpaths = ["yomama", "yoyoma"]
 
                 copy = op.join(d, op.basename(f))
@@ -59,7 +59,7 @@ class TestMachoRewriter(unittest.TestCase):
 
     def test_append_rpath_if_not_exist(self):
         with mkdtemp() as d:
-            for f, r_rpaths in FILES_TO_RPATHS.iteritems():
+            for f, r_rpaths in FILES_TO_RPATHS.items():
                 copy = op.join(d, op.basename(f))
                 shutil.copy(f, copy)
 
@@ -103,13 +103,13 @@ class TestMachoRewriter(unittest.TestCase):
 
 class TestDylibRewriter(unittest.TestCase):
     def test_install_name(self):
-        for f, r_install_name in FILES_TO_INSTALL_NAME.iteritems():
+        for f, r_install_name in FILES_TO_INSTALL_NAME.items():
             rewriter = DylibRewriter(f)
             self.assertEqual(rewriter.install_name, r_install_name)
 
     def test_change_install_name(self):
         with mkdtemp() as d:
-            for f, r_install_name in FILES_TO_INSTALL_NAME.iteritems():
+            for f, r_install_name in FILES_TO_INSTALL_NAME.items():
                 copy = op.join(d, op.basename(f))
                 shutil.copy(f, copy)
 

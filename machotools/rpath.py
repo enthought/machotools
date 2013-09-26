@@ -5,7 +5,7 @@ import macholib.mach_o
 
 from macholib.ptypes import sizeof
 
-from machotools.utils import rstrip_null_bytes, macho_path_as_data, safe_update
+from machotools.utils import convert_to_string, macho_path_as_data, safe_update
 
 def list_rpaths(filename):
     """Get the list of rpaths defined in the given mach-o binary.
@@ -34,10 +34,10 @@ def _list_rpaths_macho(m):
                 isinstance(command[1], macholib.mach_o.rpath_command)]
         for rpath_command in rpath_commands:
             rpath = rpath_command[2]
-            if not rpath.endswith("\x00"):
+            if not rpath.endswith(b"\x00"):
                 raise ValueError("Unexpected end character for rpath command value: %r".format(rpath))
             else:
-                header_rpaths.append(rstrip_null_bytes(rpath))
+                header_rpaths.append(convert_to_string(rpath))
         rpaths.append(header_rpaths)
 
     return rpaths

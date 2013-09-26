@@ -12,7 +12,7 @@ from .common import BaseMachOCommandTestCase
 
 class TestInstallName(BaseMachOCommandTestCase):
     def test_simple_read(self):
-        for f, install_name in FILES_TO_INSTALL_NAME.iteritems():
+        for f, install_name in FILES_TO_INSTALL_NAME.items():
             self.assertEqual(len(misc.install_name(f)), 1)
             self.assertEqual(misc.install_name(f)[0], install_name)
 

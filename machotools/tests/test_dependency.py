@@ -12,7 +12,7 @@ from .common import BaseMachOCommandTestCase
 
 class TestDependencies(BaseMachOCommandTestCase):
     def test_simple_read(self):
-        for f, dependencies in FILES_TO_DEPENDENCY_NAMES.iteritems():
+        for f, dependencies in FILES_TO_DEPENDENCY_NAMES.items():
             self.assertEqual(len(dependency.dependencies(f)), 1)
             self.assertEqual(dependency.dependencies(f)[0], dependencies)
 

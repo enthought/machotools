@@ -5,12 +5,12 @@ import macholib
 from macholib import mach_o
 
 from machotools.common import _change_command_data_inplace, _find_lc_dylib_command
-from machotools.utils import rstrip_null_bytes, safe_update
+from machotools.utils import convert_to_string, safe_update
 
 def _find_specific_lc_load_dylib(header, dependency_pattern):
     for index, (load_command, dylib_command, data) in \
             _find_lc_dylib_command(header, mach_o.LC_LOAD_DYLIB):
-        m = dependency_pattern.search(rstrip_null_bytes(data))
+        m = dependency_pattern.search(convert_to_string(data))
         if m:
             return index, (load_command, dylib_command, data)
 
@@ -44,7 +44,7 @@ def _list_dependencies_macho(m):
         this_ret = []
         for load_command, dylib_command, data in header.commands:
             if load_command.cmd == mach_o.LC_LOAD_DYLIB:
-                this_ret.append(rstrip_null_bytes(data))
+                this_ret.append(convert_to_string(data))
         ret.append(this_ret)
     return ret
 

@@ -1,5 +1,7 @@
 # Copyright (c) 2013 by Enthought, Ltd.
 # All rights reserved.
+import sys
+
 import macholib.MachO
 
 from macholib import mach_o
@@ -19,7 +21,9 @@ def _install_name_macho(m):
         install_names = []
         for command in header.commands:
             if command[0].cmd == mach_o.LC_ID_DYLIB:
-                install_names.append(rstrip_null_bytes(command[2]))
+                data = rstrip_null_bytes(command[2])
+                install_name = data.decode(sys.getfilesystemencoding())
+                install_names.append(install_name)
 
         if len(install_names) != 1:
             raise ValueError("Unexpected number of LC_ID_DYLIB commands (%d)" % len(install_names))

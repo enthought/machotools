@@ -3,6 +3,7 @@
 import os
 import shutil
 import stat
+import sys
 import uuid
 
 from macholib.util import fsencoding
@@ -26,23 +27,13 @@ def macho_path_as_data(filename, pad_to=4):
         filename += b'\x00' * (pad_to - rem)
     return filename
 
-def count_end_null_bytes(s):
-    """Returns the number of NULL bytes at the end of the given string."""
-    if s.endswith(b'\x00'):
-        i = 1
-        while s[-i] == b'\x00':
-            i += 1
-        return i - 1
-    else:
-        return 0
-
 def rstrip_null_bytes(s):
     """Right-strip any null bytes at the end of the given string."""
-    n_null = count_end_null_bytes(s) 
-    if n_null > 0:
-        return s[:-n_null]
-    else:
-        return s
+    return s.rstrip(b'\x00')
+
+def convert_to_string(data):
+    data = rstrip_null_bytes(data)
+    return data.decode(sys.getfilesystemencoding())
 
 def safe_write(target, writer, mode="wt"):
     """a 'safe' way to write to files.

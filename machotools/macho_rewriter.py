@@ -8,7 +8,7 @@ from .dependency import _list_dependencies_macho, _change_command_data_inplace, 
 from .detect import detect_macho_type
 from .misc import _install_name_macho, _change_id_dylib_command
 from .rpath import _add_rpath_to_header, _list_rpaths_macho
-from .utils import rstrip_null_bytes, safe_update
+from .utils import convert_to_string, safe_update
 
 class _MachoRewriter(object):
     """
@@ -158,7 +158,7 @@ class _MachoRewriter(object):
         for command_index, (load_command, dylib_command, data) in \
                 _find_lc_dylib_command(header, macholib.mach_o.LC_LOAD_DYLIB):
 
-            name = rstrip_null_bytes(data)
+            name = convert_to_string(data)
             m = r_old_dependency.search(name)
             if m:
                 _change_command_data_inplace(header, command_index,

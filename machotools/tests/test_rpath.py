@@ -17,7 +17,7 @@ class TestRpath(unittest.TestCase):
         return temp_fp
 
     def test_list_rpaths(self):
-        for f, rpaths in FILES_TO_RPATHS.iteritems():
+        for f, rpaths in FILES_TO_RPATHS.items():
             self.assertEqual(len(list_rpaths(f)), 1)
             self.assertEqual(list_rpaths(f)[0], rpaths)
 
