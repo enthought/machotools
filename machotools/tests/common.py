@@ -1,3 +1,6 @@
+import contextlib
+import shutil
+import tempfile
 import unittest
 
 import os.path as op
@@ -6,19 +9,31 @@ import macholib
 
 DYLIB_DIRECTORY = op.join(op.dirname(__file__), "data")
 
+FOO_DYLIB = op.join(DYLIB_DIRECTORY, "foo.dylib")
 FILES_TO_INSTALL_NAME = {
-    op.join(DYLIB_DIRECTORY, "foo.dylib"): "foo.dylib",
+    FOO_DYLIB: "foo.dylib",
     op.join(DYLIB_DIRECTORY, "foo2.dylib"): "yoyo.dylib",
 }
 
 FILES_TO_RPATHS = {
-    op.join(DYLIB_DIRECTORY, "foo.dylib"): [],
+    FOO_DYLIB: [],
     op.join(DYLIB_DIRECTORY, "foo_rpath.dylib"): ["@loader_path/../lib"],
 }
 
+SIMPLE_MAIN = op.join(DYLIB_DIRECTORY, "main")
 FILES_TO_DEPENDENCY_NAMES = {
-    op.join(DYLIB_DIRECTORY, "main"): ["bar.1.0.0.dylib", "/usr/lib/libSystem.B.dylib"]
+    SIMPLE_MAIN: ["bar.1.0.0.dylib", "/usr/lib/libSystem.B.dylib"]
 }
+
+SIMPLE_BUNDLE = op.join(DYLIB_DIRECTORY, "foo.bundle")
+
+NO_MACHO_FILE = op.join(DYLIB_DIRECTORY, "Makefile")
+
+@contextlib.contextmanager
+def mkdtemp():
+    d = tempfile.mkdtemp()
+    yield d
+    shutil.rmtree(d)
 
 class BaseMachOCommandTestCase(unittest.TestCase):
     def assert_commands_equal(self, filename, r_filename, filters=None):

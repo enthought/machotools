@@ -22,9 +22,12 @@ def list_rpaths(filename):
     filename: str
         The path to the mach-o binary file to look at
     """
+    m = macholib.MachO.MachO(filename)
+    return _list_rpaths_macho(m)
+
+def _list_rpaths_macho(m):
     rpaths = []
 
-    m = macholib.MachO.MachO(filename)
     for header in m.headers:
         header_rpaths = []
         rpath_commands = [command for command in header.commands if

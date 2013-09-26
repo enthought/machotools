@@ -1,4 +1,3 @@
-import os
 import re
 
 import macholib
@@ -35,9 +34,12 @@ def dependencies(filename):
     dependency_names: seq
         dependency_names[i] is the list of dependencies for the i-th header.
     """
+    m = macholib.MachO.MachO(filename)
+    return _list_dependencies_macho(m)
+
+def _list_dependencies_macho(m):
     ret = []
 
-    m = macholib.MachO.MachO(filename)
     for header in m.headers:
         this_ret = []
         for load_command, dylib_command, data in header.commands:

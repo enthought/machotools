@@ -4,7 +4,7 @@ import unittest
 
 import os.path as op
 
-from machotools import add_rpaths, list_rpaths
+from ..rpath import add_rpaths, list_rpaths
 
 from machotools.tests.common import DYLIB_DIRECTORY, FILES_TO_RPATHS
 

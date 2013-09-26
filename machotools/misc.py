@@ -9,9 +9,12 @@ from machotools.common import _change_command_data_inplace, _find_lc_dylib_comma
 
 def install_name(filename):
     """Returns the install name of a mach-o dylib file."""
+    m = macholib.MachO.MachO(filename)
+    return _install_name_macho(m)
+
+def _install_name_macho(m):
     ret = []
 
-    m = macholib.MachO.MachO(filename)
     for header in m.headers:
         install_names = []
         for command in header.commands:
@@ -51,7 +54,7 @@ def change_install_name(filename, new_install_name):
     """
     m = macholib.MachO.MachO(filename)
     for header in m.headers:
-        _change_dylib_command(header, new_install_name)
+        _change_id_dylib_command(header, new_install_name)
 
     def writer(f):
         for header in m.headers:
@@ -59,7 +62,7 @@ def change_install_name(filename, new_install_name):
             header.write(f)
     safe_update(filename, writer, "wb")
 
-def _change_dylib_command(header, new_install_name):
+def _change_id_dylib_command(header, new_install_name):
     command_index, command_tuple = _find_lc_id_dylib(header)
     _change_command_data_inplace(header, command_index, command_tuple, new_install_name)
 
