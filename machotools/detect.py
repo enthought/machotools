@@ -1,9 +1,16 @@
+import os
+
 from macholib.MachO import MachO
 
 def detect_macho_type(path):
     """
     Returns None if not a mach-o.
+
+    Raise an error for non-existing paths.
     """
+    if os.stat(path).st_size < 4:
+        return None
+
     try:
         p = MachO(path)
     except ValueError as e:
@@ -18,6 +25,9 @@ def detect_macho_type(path):
 
 def is_macho(path):
     """Return True if the given path is a Mach-O binary."""
+    if os.stat(path).st_size < 4:
+        return None
+
     try:
         MachO(path)
         return True

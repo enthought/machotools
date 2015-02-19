@@ -2,9 +2,14 @@ import unittest
 
 from machotools.detect import is_macho, is_dylib, is_executable, is_bundle
 
-from machotools.tests.common import FOO_DYLIB, SIMPLE_MAIN, SIMPLE_BUNDLE, NO_MACHO_FILE
+from machotools.tests.common import (
+    FOO_DYLIB, SIMPLE_MAIN, SIMPLE_BUNDLE, NO_MACHO_FILE, TINY_FILE
+)
 
 class TestDetect(unittest.TestCase):
+    def test_tiny_file(self):
+        self.assertFalse(is_macho(TINY_FILE))
+
     def test_dylib(self):
         self.assertTrue(is_dylib(FOO_DYLIB))
         self.assertFalse(is_bundle(FOO_DYLIB))
