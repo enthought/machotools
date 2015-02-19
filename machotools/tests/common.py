@@ -29,6 +29,8 @@ SIMPLE_BUNDLE = op.join(DYLIB_DIRECTORY, "foo.bundle")
 
 NO_MACHO_FILE = op.join(DYLIB_DIRECTORY, "Makefile")
 
+TINY_FILE = op.join(DYLIB_DIRECTORY, "tiny")
+
 @contextlib.contextmanager
 def mkdtemp():
     d = tempfile.mkdtemp()
