@@ -3,7 +3,7 @@ import os.path
 from setuptools import setup
 
 
-VERSION = "0.2.0.dev1"
+VERSION = "0.2.0"
 
 
 if __name__ == "__main__":
