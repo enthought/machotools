@@ -1,11 +1,13 @@
-import os.path as op
+import os.path
 
 from setuptools import setup
 
+
 VERSION = "0.2.0.dev1"
 
+
 if __name__ == "__main__":
-    with open(op.join("machotools", "__version.py"), "wt") as fp:
+    with open(os.path.join("machotools", "__version.py"), "wt") as fp:
         fp.write("__version__ = '{0}'".format(VERSION))
 
     setup(name="machotools",
@@ -16,8 +18,7 @@ if __name__ == "__main__":
           packages=["machotools", "machotools.tests"],
           install_requires=["macholib"],
           classifiers=[
-              "Programming Language :: Python :: 2.6",
               "Programming Language :: Python :: 2.7",
-              "Programming Language :: Python :: 3.2",
-              "Programming Language :: Python :: 3.3",
+              "Programming Language :: Python :: 3.5",
+              "Programming Language :: Python :: 3.6",
           ])
