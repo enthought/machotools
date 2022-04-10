@@ -9,6 +9,7 @@ from .detect import detect_macho_type
 from .misc import _install_name_macho, _change_id_dylib_command
 from .rpath import _add_rpath_to_header, _list_rpaths_macho
 from .utils import convert_to_string, safe_update
+from .weak_load import list_weak_dylibs
 
 class _MachoRewriter(object):
     """
@@ -36,6 +37,7 @@ class _MachoRewriter(object):
 
         self._rpaths = _list_rpaths_macho(self._m)[0]
         self._dependencies = _list_dependencies_macho(self._m)[0]
+        self._weak_dylibs = list_weak_dylibs(self.filename)[0]
 
     def __enter__(self):
         return self
@@ -59,6 +61,10 @@ class _MachoRewriter(object):
         This includes the list of uncommitted changes.
         """
         return self._rpaths
+
+    @property
+    def weak_dylibs(self):
+        return self._weak_dylibs
 
     #----------
     # rpath API
